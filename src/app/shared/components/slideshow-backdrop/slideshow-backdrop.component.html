@@ -1,0 +1,8 @@
+<swiper class="my-swiper" [config]="swiperConfig">
+  <ng-template swiperSlide *ngFor="let movie of movies">
+    <!-- <h2>{{movie.backdrop_path | image}}</h2> -->
+    <ion-card>
+      <img [src]="movie.backdrop_path | image" />
+    </ion-card>
+  </ng-template>
+</swiper>

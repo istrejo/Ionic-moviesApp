@@ -1,0 +1,11 @@
+<swiper class="my-swiper" [config]="swiperConfig">
+  <ng-template swiperSlide *ngFor="let pairs of movies | pairs">
+    <ion-row>
+      <ion-col size="12" *ngFor="let movie of pairs">
+        <ion-card>
+          <img class="poster" [src]="movie.poster_path | image" />
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ng-template>
+</swiper>
