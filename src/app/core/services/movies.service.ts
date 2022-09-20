@@ -9,6 +9,8 @@ const { url, api_key } = environment;
   providedIn: 'root',
 })
 export class MoviesService {
+  private popularPage: number = 0;
+
   constructor(private http: HttpClient) {}
 
   private executeQuery<T>(query: string) {
@@ -51,7 +53,9 @@ export class MoviesService {
   }
 
   getPopularMovies() {
-    const query = '/discover/movie?sort_by=popularity.desc';
+    this.popularPage++;
+
+    const query = `/discover/movie?sort_by=popularity.desc&page=${this.popularPage}`;
 
     return this.executeQuery<ResponseMDB>(query);
   }

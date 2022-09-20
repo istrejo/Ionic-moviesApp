@@ -19,9 +19,17 @@ export class Tab1Page implements OnInit {
       this.currentMovies = res.results;
     });
 
+    this.getPopular();
+  }
+
+  loadMore(event: Event) {
+    this.getPopular();
+  }
+
+  getPopular() {
     this.moviesService.getPopularMovies().subscribe((res) => {
       console.log('Populares', res);
-      this.popularMovies = res.results;
+      this.popularMovies = [...this.popularMovies, ...res.results];
     });
   }
 }

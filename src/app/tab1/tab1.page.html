@@ -27,5 +27,6 @@
     </ion-row>
   </ion-grid>
 
-  <app-pair-slides [movies]="popularMovies"> </app-pair-slides>
+  <app-pair-slides [movies]="popularMovies" (loadMore)="loadMore($event)">
+  </app-pair-slides>
 </ion-content>
