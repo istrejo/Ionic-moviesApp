@@ -1,10 +1,13 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
-// Swiper
+import { ModalController } from '@ionic/angular';
 
+// Swiper
 import { SwiperComponent } from 'swiper/angular';
 import { SwiperOptions } from 'swiper';
+
 import { Movie } from 'src/app/core/models/interfaces';
+import { DetailComponent } from '../detail/detail.component';
 
 @Component({
   selector: 'app-slideshow-backdrop',
@@ -19,7 +22,18 @@ export class SlideshowBackdropComponent implements OnInit {
     slidesPerView: 1.1,
   };
 
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
+
+  async showDetail(id: number) {
+    const modal = await this.modalCtrl.create({
+      component: DetailComponent,
+      componentProps: {
+        id,
+      },
+    });
+
+    modal.present();
+  }
 }

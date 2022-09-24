@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ResponseMDB } from '../models/interfaces';
+import {
+  CreditsResponse,
+  MovieDetail,
+  ResponseMDB,
+} from '../models/interfaces';
 import { environment } from 'src/environments/environment';
 
 const { url, api_key } = environment;
@@ -44,9 +48,6 @@ export class MoviesService {
     const start = `${today.getFullYear()}-${monthString}-01`;
     const end = `${today.getFullYear()}-${monthString}-${lastDay}`;
 
-    console.log('Inicio -->', start);
-    console.log('Fin -->', end);
-
     return this.executeQuery<ResponseMDB>(
       `/discover/movie?primary_release_date.gte=${start}&primary_release_date.lte=${end}`
     );
@@ -58,5 +59,13 @@ export class MoviesService {
     const query = `/discover/movie?sort_by=popularity.desc&page=${this.popularPage}`;
 
     return this.executeQuery<ResponseMDB>(query);
+  }
+
+  getDetail(id: number) {
+    return this.executeQuery<MovieDetail>(`/movie/${id}?a=1`);
+  }
+
+  getActors(id: number) {
+    return this.executeQuery<CreditsResponse>(`/movie/${id}/credits?a=1`);
   }
 }

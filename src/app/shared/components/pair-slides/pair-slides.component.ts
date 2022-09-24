@@ -12,6 +12,8 @@ import { SwiperComponent } from 'swiper/angular';
 import { SwiperOptions } from 'swiper';
 
 import { Movie } from 'src/app/core/models/interfaces';
+import { DetailComponent } from '../detail/detail.component';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-pair-slides',
@@ -28,11 +30,22 @@ export class PairSlidesComponent implements OnInit {
     slidesPerView: 2.3,
   };
 
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
 
   onClick() {
     this.loadMore.emit();
+  }
+
+  async showDetail(id: number) {
+    const modal = await this.modalCtrl.create({
+      component: DetailComponent,
+      componentProps: {
+        id,
+      },
+    });
+
+    modal.present();
   }
 }

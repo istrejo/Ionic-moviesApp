@@ -13,7 +13,6 @@ export class PairsPipe implements PipeTransform {
       return result;
     }, []);
 
-    console.log(pairs);
     return pairs;
   }
 }

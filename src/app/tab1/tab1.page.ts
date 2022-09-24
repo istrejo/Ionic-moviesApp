@@ -28,7 +28,6 @@ export class Tab1Page implements OnInit {
 
   getPopular() {
     this.moviesService.getPopularMovies().subscribe((res) => {
-      console.log('Populares', res);
       this.popularMovies = [...this.popularMovies, ...res.results];
     });
   }
