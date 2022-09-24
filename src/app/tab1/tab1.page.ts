@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { IonRefresher } from '@ionic/angular';
 import { Movie } from '../core/models/interfaces';
 import { MoviesService } from '../core/services/movies.service';
 
@@ -9,6 +10,8 @@ import { MoviesService } from '../core/services/movies.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class Tab1Page implements OnInit {
+  @ViewChild('refresher') refresher: IonRefresher;
+
   currentMovies: Movie[] = [];
   popularMovies: Movie[] = [];
 
@@ -30,5 +33,14 @@ export class Tab1Page implements OnInit {
     this.moviesService.getPopularMovies().subscribe((res) => {
       this.popularMovies = [...this.popularMovies, ...res.results];
     });
+  }
+
+  doRefresh() {
+    this.moviesService.getFeature().subscribe((res) => {
+      this.currentMovies = res.results;
+    });
+
+    this.getPopular();
+    this.refresher.complete();
   }
 }

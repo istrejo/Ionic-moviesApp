@@ -3,6 +3,11 @@
 //   --border-color: transparent;
 // }
 
+ion-refresher {
+  margin-top: 40px;
+  z-index: 999;
+}
+
 ion-content {
   --offset-top: 0px;
   position: absolute;

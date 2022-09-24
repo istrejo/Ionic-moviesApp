@@ -17,7 +17,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="actors.length && movie">
+<ion-content *ngIf="!loading">
+  <ion-refresher
+    #refresher
+    slot="fixed"
+    (ionRefresh)="doRefresh()"
+    pullFactor="0.8"
+    pullMin="60"
+    pullMax="120"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <!-- <ng-template *ngIf="movie"> -->
   <!-- </ng-template> -->
   <img *ngIf="movie.backdrop_path" [src]="movie.backdrop_path | image" />
@@ -33,7 +43,7 @@
       <ion-col>
         <ion-item lines="">
           <ion-icon slot="start" name="thumbs-up" color="primary"></ion-icon>
-          <ion-label>Votos</ion-label>
+          <ion-label>Rating</ion-label>
           <ion-note slot="end" color="primary">{{
             movie.vote_average
           }}</ion-note>
@@ -65,7 +75,7 @@
     </ion-row>
   </ion-grid>
 
-  <ion-grid fixed>
+  <ion-grid fixed *ngIf="actors.length">
     <ion-row>
       <ion-col>
         <ion-label>Actores</ion-label>
