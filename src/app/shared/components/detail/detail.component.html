@@ -59,7 +59,7 @@
 
   <ion-grid fixed>
     <ion-row>
-      <ion-col size="12">
+      <ion-col *ngIf="movie.overview" size="12">
         <ion-label>{{ movie.overview | slice: 0:hidden }}...</ion-label>
         <ion-label color="primary" (click)="readMore()">{{
           more ? "Leer menos!" : "Leer más!"
@@ -93,19 +93,8 @@
         />
         <img *ngIf="!actor.profile_path" src="/assets/no-avatar.jpg" alt="" />
         <ion-label class="actor-name">{{ actor.name }}</ion-label>
+        <!-- <ion-label color="primary">{{ actor.character }}</ion-label> -->
       </ion-card>
     </ng-template>
   </swiper>
-
-  <ion-list>
-    <ion-item
-      *ngFor="
-        let item of [
-          1, 1, 1, 1, 1, 1, 1, 11, 1, 1, 1, 1, 1, 11, 1, 1, 1, 1, 1, 1, 1
-        ]
-      "
-    >
-      <ion-label>Awesome Label</ion-label>
-    </ion-item>
-  </ion-list>
 </ion-content>

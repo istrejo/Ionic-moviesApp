@@ -6,6 +6,7 @@ import { Movie } from 'src/app/core/models/interfaces';
 import { SwiperOptions } from 'swiper';
 import { ModalController } from '@ionic/angular';
 import { DetailComponent } from '../detail/detail.component';
+import { MoviesService } from 'src/app/core/services/movies.service';
 
 @Component({
   selector: 'app-slideshow-poster',
@@ -20,18 +21,11 @@ export class SlideshowPosterComponent implements OnInit {
     slidesPerView: 2.3,
   };
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(private movieService: MoviesService) {}
 
   ngOnInit() {}
 
-  async showDetail(id: number) {
-    const modal = await this.modalCtrl.create({
-      component: DetailComponent,
-      componentProps: {
-        id,
-      },
-    });
-
-    modal.present();
+  showDetail(id: number) {
+    this.movieService.showDetail(id);
   }
 }

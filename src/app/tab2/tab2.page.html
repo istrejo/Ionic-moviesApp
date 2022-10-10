@@ -2,16 +2,14 @@
   <ion-toolbar>
     <ion-title> Buscar Película </ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Buscard película"
+      (ionChange)="search()"
+      [value]="findText"
+    ></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
-
-<ion-toolbar>
-  <ion-searchbar
-    placeholder="Buscard película"
-    (ionChange)="search()"
-    [value]="findText"
-    debounce="700"
-  ></ion-searchbar>
-</ion-toolbar>
 
 <ion-content [fullscreen]="true">
   <ion-grid fixed *ngIf="searching">
@@ -22,7 +20,7 @@
     </ion-row>
   </ion-grid>
 
-  <ion-list *ngIf="!searching">
+  <ion-list *ngIf="!(searchedMovies | async) && !searching ">
     <ion-list-header>
       <ion-label>ideas</ion-label>
     </ion-list-header>
@@ -32,4 +30,31 @@
       <ion-label color="medium">{{idea}}</ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="6" *ngFor="let movie of searchedMovies | async">
+        <ion-card (click)="showDetail(movie.id)">
+          <img *ngIf="movie.poster_path" [src]="movie.poster_path | image" />
+
+          <img src="" alt="" />
+          <ion-card-header>
+            <ion-card-subtitle>{{movie.release_date}}</ion-card-subtitle>
+            <ion-card-title class="ion-text-center"
+              >{{movie.title}}</ion-card-title
+            >
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- <ion-list *ngIf="searchedMovies | async">
+    <ion-list-header>
+      <ion-label>Resultados</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let movie of searchedMovies | async ">
+      <ion-label>{{movie.title}}</ion-label>
+    </ion-item>
+  </ion-list> -->
 </ion-content>

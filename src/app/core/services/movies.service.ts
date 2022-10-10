@@ -6,6 +6,8 @@ import {
   ResponseMDB,
 } from '../models/interfaces';
 import { environment } from 'src/environments/environment';
+import { ModalController } from '@ionic/angular';
+import { DetailComponent } from 'src/app/shared/components/detail/detail.component';
 
 const { url, api_key } = environment;
 
@@ -15,7 +17,11 @@ const { url, api_key } = environment;
 export class MoviesService {
   private popularPage: number = 0;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+
+    private modalCtrl: ModalController
+  ) {}
 
   private executeQuery<T>(query: string) {
     const params = new HttpParams()
@@ -67,5 +73,20 @@ export class MoviesService {
 
   getActors(id: number) {
     return this.executeQuery<CreditsResponse>(`/movie/${id}/credits?a=1`);
+  }
+
+  searchMovie(query: string) {
+    return this.executeQuery<ResponseMDB>(`/search/movie?query=${query}`);
+  }
+
+  async showDetail(id: number) {
+    const modal = await this.modalCtrl.create({
+      component: DetailComponent,
+      componentProps: {
+        id,
+      },
+    });
+
+    modal.present();
   }
 }

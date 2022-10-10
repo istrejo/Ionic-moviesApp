@@ -1,5 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonSearchbar } from '@ionic/angular';
+import { observable, Observable } from 'rxjs';
+import { map, debounce, finalize, debounceTime, retry } from 'rxjs/operators';
+import { Movie } from '../core/models/interfaces';
+import { MoviesService } from '../core/services/movies.service';
 
 @Component({
   selector: 'app-tab2',
@@ -8,6 +12,7 @@ import { IonSearchbar } from '@ionic/angular';
 })
 export class Tab2Page {
   @ViewChild(IonSearchbar) serachBar: IonSearchbar;
+  searchedMovies: Observable<Movie[]>;
   findText: string = '';
   ideas: string[] = [
     'Spide-Man',
@@ -17,16 +22,26 @@ export class Tab2Page {
   ];
   searching: boolean = false;
 
-  constructor() {}
+  constructor(private movieService: MoviesService) {}
 
   search() {
+    console.log('buscando');
     this.searching = true;
     this.findText = this.serachBar.value;
-    console.log(this.serachBar);
-    console.log(this.findText);
+    if (!this.findText || this.findText === ' ') {
+      this.searchedMovies = new Observable();
+      this.searching = false;
+      return;
+    }
+
+    this.searchedMovies = this.movieService.searchMovie(this.findText).pipe(
+      debounceTime(800),
+      map((data) => data.results),
+      finalize(() => (this.searching = false))
+    );
   }
 
-  // selectIdea(idea) {
-  //   this.serachBar.value = idea;
-  // }
+  showDetail(id: number) {
+    this.movieService.showDetail(id);
+  }
 }
