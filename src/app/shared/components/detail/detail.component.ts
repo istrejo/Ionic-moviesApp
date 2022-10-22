@@ -9,8 +9,6 @@ import { Cast, MovieDetail } from 'src/app/core/models/interfaces';
 import { MoviesService } from 'src/app/core/services/movies.service';
 import { SwiperOptions } from 'swiper';
 
-import { tap } from 'rxjs/operators';
-
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
@@ -35,23 +33,18 @@ export class DetailComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private moviesService: MoviesService,
-    private loadingCtrl: LoadingController
+    private loadingService: LoadingService
   ) {}
 
-  async ngOnInit() {
+  ngOnInit() {
     this.loading = true;
-    const loader = await this.loadingCtrl.create({
-      message: 'Cargando...',
-      spinner: 'circles',
-    });
-
-    loader.present();
+    this.loadingService.showLoading();
     this.getDetail();
 
     this.moviesService.getActors(this.id).subscribe(({ cast }) => {
       this.actors = cast;
       this.loading = false;
-      loader.dismiss();
+      this.loadingService.dismissLoader();
     });
   }
 
