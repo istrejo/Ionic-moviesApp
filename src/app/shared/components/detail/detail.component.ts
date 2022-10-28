@@ -4,8 +4,9 @@ import {
   LoadingController,
   ModalController,
 } from '@ionic/angular';
-import { LoadingService } from 'src/app/core/loading.service';
+// import { LoadingService } from 'src/app/core/loading.service';
 import { Cast, MovieDetail } from 'src/app/core/models/interfaces';
+import { LocalDataService } from 'src/app/core/services/local-data.service';
 import { MoviesService } from 'src/app/core/services/movies.service';
 import { SwiperOptions } from 'swiper';
 
@@ -33,18 +34,36 @@ export class DetailComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private moviesService: MoviesService,
-    private loadingService: LoadingService
+    private localDataservice: LocalDataService,
+    private loadingCtrl: LoadingController
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    const exists = await this.localDataservice.movieExists(this.id);
+    this.favorite = exists;
+
+    const loader = await this.loadingCtrl.create({
+      message: 'Loading',
+      spinner: 'bubbles',
+    });
+
+    await loader.present();
     this.loading = true;
-    this.loadingService.showLoading();
     this.getDetail();
+
+    this.localDataservice.getData().then((data) => {
+      for (const m of data) {
+        if (m.id === this.movie.id) {
+          this.favorite = true;
+          break;
+        }
+      }
+    });
 
     this.moviesService.getActors(this.id).subscribe(({ cast }) => {
       this.actors = cast;
       this.loading = false;
-      this.loadingService.dismissLoader();
+      this.loadingCtrl.dismiss();
     });
   }
 
@@ -67,7 +86,10 @@ export class DetailComponent implements OnInit {
   }
 
   addFavorite() {
-    this.favorite = !this.favorite;
+    // // this.favorite = !this.favorite;
+    this.localDataservice
+      .saveMovie(this.movie)
+      .then((exists) => (this.favorite = exists));
   }
 
   doRefresh() {
@@ -76,7 +98,6 @@ export class DetailComponent implements OnInit {
     this.moviesService.getActors(this.id).subscribe(({ cast }) => {
       this.actors = cast;
       this.loading = false;
-      console.log(cast);
       this.refresher.complete();
     });
   }

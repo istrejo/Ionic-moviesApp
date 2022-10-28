@@ -16,7 +16,7 @@ export class LoadingService {
     loading.present();
   }
 
-  async dismissLoader() {
+  dismissLoader() {
     this.loadingCtrl
       .dismiss()
       .then((response) => {

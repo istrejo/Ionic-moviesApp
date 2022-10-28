@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   CreditsResponse,
+  Genre,
   MovieDetail,
   ResponseMDB,
 } from '../models/interfaces';
@@ -16,6 +17,7 @@ const { url, api_key } = environment;
 })
 export class MoviesService {
   private popularPage: number = 0;
+  genres: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -88,5 +90,15 @@ export class MoviesService {
     });
 
     modal.present();
+  }
+
+  loadGenres(): Promise<Genre[]> {
+    return new Promise((resolve) => {
+      this.executeQuery(`/genre/movie/list?a=1`).subscribe(({ genres }) => {
+        console.log(genres);
+        this.genres = genres;
+        resolve(this.genres);
+      });
+    });
   }
 }
